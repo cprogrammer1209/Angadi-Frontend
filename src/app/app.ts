@@ -12,8 +12,11 @@ import { NavbarComponent } from './navbar/navbar.component';
 export class App {
   title = 'ShopHub - Your Online Marketplace';
 
-  constructor(public router: Router) {}
+  constructor(public router: Router) { }
 
+  summa(age:Number): void {
+    console.log("event age : ",age);
+  }
   shouldShowNavbar(): boolean {
     // Always show navbar except on login page
     return this.router.url !== '/login';

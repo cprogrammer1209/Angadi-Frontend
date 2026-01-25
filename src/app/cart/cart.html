@@ -1,0 +1,136 @@
+<div class="cart-container">
+    <div class="cart-header">
+        <h1>Shopping Cart 🛒</h1>
+        <button *ngIf="cartItems.length > 0" class="clear-cart-btn" (click)="clearCart()">
+            🗑️ Clear Cart
+        </button>
+    </div>
+
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+        <div class="empty-icon">🛒</div>
+        <h2>Your Cart is Empty</h2>
+        <p>Start adding items to your cart to see them here!</p>
+        <button class="continue-shopping-btn" (click)="continueShopping()">
+            Start Shopping
+        </button>
+    </div>
+
+    <div *ngIf="cartItems.length > 0" class="cart-content">
+        <div class="cart-items-section">
+            <div class="section-header">
+                <h2>Cart Items ({{cartItems.length}})</h2>
+            </div>
+
+            <div class="cart-items">
+                <div *ngFor="let item of cartItems" class="cart-item">
+                    <div class="item-image">
+                        <img [src]="item.image" [alt]="item.name" loading="lazy">
+                        <div *ngIf="!item.inStock" class="out-of-stock-badge">Out of Stock</div>
+                    </div>
+
+                    <div class="item-details">
+                        <h3 class="item-name">{{item.name}}</h3>
+                        <p class="item-category">Category: {{item.category}}</p>
+
+                        <div class="item-price-info">
+                            <span class="current-price">₹{{item.price}}</span>
+                            <span *ngIf="item.originalPrice" class="original-price">₹{{item.originalPrice}}</span>
+                            <span *ngIf="item.originalPrice" class="savings">
+                                Save ₹{{(item.originalPrice - item.price).toFixed(2)}} per item
+                            </span>
+                        </div>
+
+                        <div class="quantity-controls">
+                            <button class="qty-btn" (click)="decreaseQuantity(item.id)" [disabled]="!item.inStock">
+                                −
+                            </button>
+                            <span class="quantity">{{item.quantity}}</span>
+                            <button class="qty-btn" (click)="increaseQuantity(item.id)" [disabled]="!item.inStock">
+                                +
+                            </button>
+                        </div>
+
+                        <div class="item-total">
+                            <span class="total-label">Item Total:</span>
+                            <span class="total-price">₹{{getItemTotal(item).toFixed(2)}}</span>
+                        </div>
+
+                        <button class="remove-btn" (click)="removeFromCart(item.id, item.name)">
+                            🗑️ Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="continue-shopping-link" (click)="continueShopping()">
+                ← Continue Shopping
+            </button>
+        </div>
+
+        <div class="order-summary-section">
+            <div class="summary-card">
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Subtotal ({{cartItems.length}} items):</span>
+                    <span>₹{{getSubtotal().toFixed(2)}}</span>
+                </div>
+
+                <div class="summary-row" *ngIf="getTotalSavings() > 0">
+                    <span class="savings-text">Total Savings:</span>
+                    <span class="savings-amount">−₹{{getTotalSavings().toFixed(2)}}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span [class.free-shipping]="getShipping() === 0">
+                        {{getShipping() === 0 ? 'FREE' : '₹' + getShipping().toFixed(2)}}
+                    </span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Tax (GST {{taxRate * 100}}%):</span>
+                    <span>₹{{getTax().toFixed(2)}}</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-row total-row">
+                    <span>Total:</span>
+                    <span class="total-amount">₹{{getTotal().toFixed(2)}}</span>
+                </div>
+
+                <button class="checkout-btn" (click)="proceedToCheckout()">
+                    Proceed to Checkout
+                </button>
+
+                <div class="shipping-note" *ngIf="getShipping() > 0">
+                    <p>💡 Add ₹{{(500 - getSubtotal()).toFixed(2)}} more to get FREE shipping!</p>
+                </div>
+
+                <div class="shipping-note free" *ngIf="getShipping() === 0">
+                    <p>✅ You got FREE shipping!</p>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <h3>We Accept</h3>
+                <div class="payment-icons">
+                    <span class="payment-icon">💳</span>
+                    <span class="payment-icon">🏦</span>
+                    <span class="payment-icon">📱</span>
+                    <span class="payment-icon">💰</span>
+                </div>
+                <p class="payment-text">Credit Card • Debit Card • UPI • Cash on Delivery</p>
+            </div>
+
+            <div class="security-badge">
+                <span class="security-icon">🔒</span>
+                <div>
+                    <strong>Secure Checkout</strong>
+                    <p>Your payment information is safe with us</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

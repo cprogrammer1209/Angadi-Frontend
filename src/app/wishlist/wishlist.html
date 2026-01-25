@@ -1,0 +1,84 @@
+<div class="wishlist-container">
+  <div class="wishlist-header">
+    <h1>My Wishlist ❤️</h1>
+    <div class="wishlist-actions" *ngIf="wishlistItems.length > 0">
+      <button class="move-all-btn" (click)="moveAllToCart()">
+        🛒 Move All to Cart
+      </button>
+      <button class="clear-btn" (click)="clearWishlist()">
+        🗑️ Clear Wishlist
+      </button>
+    </div>
+  </div>
+
+  <div class="wishlist-stats" *ngIf="wishlistItems.length > 0">
+    <div class="stat-card">
+      <span class="stat-number">{{wishlistItems.length}}</span>
+      <span class="stat-label">Total Items</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">{{getInStockCount()}}</span>
+      <span class="stat-label">In Stock</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-number">₹{{getTotalValue().toFixed(2)}}</span>
+      <span class="stat-label">Total Value</span>
+    </div>
+  </div>
+
+  <div class="empty-wishlist" *ngIf="wishlistItems.length === 0">
+    <div class="empty-icon">🤍</div>
+    <h2>Your Wishlist is Empty</h2>
+    <p>Start adding products you love to your wishlist!</p>
+    <button class="browse-btn" routerLink="/">
+      Browse Products
+    </button>
+  </div>
+
+  <div class="wishlist-items" *ngIf="wishlistItems.length > 0">
+    <div *ngFor="let item of wishlistItems" class="wishlist-item">
+      <div class="item-image">
+        <img [src]="item.image" [alt]="item.name" loading="lazy">
+        <div class="stock-badge" [class.out-of-stock]="!item.inStock">
+          {{item.inStock ? 'In Stock' : 'Out of Stock'}}
+        </div>
+      </div>
+
+      <div class="item-details">
+        <h3 class="item-name">{{item.name}}</h3>
+
+        <div class="item-category">
+          <span class="category-badge">{{item.category}}</span>
+        </div>
+
+        <div class="item-rating">
+          <div class="stars">
+            <span *ngFor="let star of getStarArray(item.rating)" class="star" [class.filled]="star">★</span>
+          </div>
+          <span class="rating-text">{{item.rating}} ({{item.reviews}} reviews)</span>
+        </div>
+
+        <div class="item-price">
+          <span class="current-price">₹{{item.price}}</span>
+          <span *ngIf="item.originalPrice" class="original-price">₹{{item.originalPrice}}</span>
+          <span *ngIf="item.originalPrice" class="discount-badge">
+            Save ₹{{(item.originalPrice - item.price).toFixed(2)}}
+          </span>
+        </div>
+
+        <div class="item-actions">
+          <button class="add-cart-btn" [disabled]="!item.inStock" (click)="addToCart(item)">
+            <span class="btn-icon">🛒</span>
+            {{item.inStock ? 'Add to Cart' : 'Out of Stock'}}
+          </button>
+
+          <button class="remove-btn" (click)="removeFromWishlist(item.id, item.name)">
+            <span class="btn-icon">🗑️</span>
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

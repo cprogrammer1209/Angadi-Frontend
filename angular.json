@@ -70,7 +70,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-             "polyfills": [
+            "polyfills": [
               "zone.js",
               "zone.js/testing"
             ],
@@ -88,5 +88,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "5be2942d-f578-4830-8bd1-488e4fa7cd2b"
   }
 }
