@@ -3,55 +3,49 @@
     <div class="nav-brand">
       <h2 routerLink="/">E-Commerce</h2>
     </div>
-    
+
     <div class="nav-search">
-      <input type="text" placeholder="Search products..." class="search-input">
-      <button class="search-btn">🔍</button>
+      <input type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchTerm"
+        (input)="onSearchInput($event)" (keyup.enter)="onSearchSubmit()">
+
+      <button class="search-btn" (click)="onSearchSubmit()" [disabled]="!searchTerm.trim()">🔍</button>
+      <button *ngIf="searchTerm" class="clear-btn" (click)="clearSearch()" title="Clear search">
+        ✕
+      </button>
     </div>
-    
+
     <div class="nav-links">
       <a routerLink="/" class="nav-link">Home</a>
       <a href="#" class="nav-link">Categories</a>
       <a href="#" class="nav-link">Deals</a>
-      
+
+      <!-- <button 
+        routerLink="/wishlist"
+        class="nav-link wishlist"
+        [title]="!isAuthenticated ? 'Login required for wishlist' : 'View wishlist'">
+        ❤️ Wishlist ({{wishlistCount}})
+      </button> -->
+
+      <a routerLink="/wishlists" class="nav-link wishlist" title="View wishlist">❤️ ({{wishlistCount}})</a>
       <!-- Cart - Always visible but may require login for checkout -->
-      <button 
-        class="nav-link cart" 
-        (click)="handleCartClick()"
-        [title]="!isAuthenticated ? 'Login required for checkout' : 'View cart'"
-      >
+      <button class="nav-link cart" (click)="handleCartClick()"
+        [title]="!isAuthenticated ? 'Login required for checkout' : 'View cart'">
         🛒 Cart ({{cartCount}})
       </button>
-      
+
       <!-- Authentication Section -->
       <div class="auth-section">
         <!-- Not Authenticated -->
-        <button 
-          *ngIf="!isAuthenticated" 
-          (click)="navigateToLogin()" 
-          class="login-btn"
-        >
+        <button *ngIf="!isAuthenticated" (click)="navigateToLogin()" class="login-btn">
           Sign In
         </button>
-        
+
         <!-- Authenticated User Menu -->
-        <div 
-          *ngIf="isAuthenticated" 
-          class="user-menu-container"
-          (click)="$event.stopPropagation()"
-        >
-          <button 
-            class="user-menu-trigger" 
-            (click)="toggleUserMenu()"
-            [attr.aria-expanded]="showUserMenu"
-            aria-haspopup="true"
-          >
-            <img 
-              *ngIf="currentUser?.avatar; else defaultAvatar" 
-              [src]="currentUser!.avatar" 
-              [alt]="currentUser!.name + ' avatar'"
-              class="user-avatar"
-            >
+        <div *ngIf="isAuthenticated" class="user-menu-container" (click)="$event.stopPropagation()">
+          <button class="user-menu-trigger" (click)="toggleUserMenu()" [attr.aria-expanded]="showUserMenu"
+            aria-haspopup="true">
+            <img *ngIf="currentUser?.avatar; else defaultAvatar" [src]="currentUser!.avatar"
+              [alt]="currentUser!.name + ' avatar'" class="user-avatar">
             <ng-template #defaultAvatar>
               <div class="default-avatar">
                 {{ currentUser?.name?.charAt(0)?.toUpperCase() || 'U' }}
@@ -60,7 +54,7 @@
             <span class="user-name">{{ currentUser?.name || 'User' }}</span>
             <span class="dropdown-arrow" [class.rotated]="showUserMenu">▼</span>
           </button>
-          
+
           <div class="user-dropdown" *ngIf="showUserMenu">
             <div class="user-info">
               <div class="user-name-full">{{ currentUser?.name }}</div>
@@ -92,8 +86,4 @@
 </nav>
 
 <!-- Click outside to close menu -->
-<div 
-  *ngIf="showUserMenu" 
-  class="overlay" 
-  (click)="onDocumentClick($event)"
-></div>
+<div *ngIf="showUserMenu" class="overlay" (click)="onDocumentClick($event)"></div>

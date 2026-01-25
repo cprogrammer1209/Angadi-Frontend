@@ -1,9 +1,11 @@
 <div class="product-section">
   <!-- Guest Welcome Banner -->
   <div class="guest-banner" *ngIf="!isAuthenticated">
+    
     <div class="banner-content">
       <h3>Welcome to Our Store! 👋</h3>
-      <p>Browse our amazing products. <a (click)="router.navigate(['/login'])" class="banner-login-link">Sign in</a> for personalized recommendations, faster checkout, and exclusive deals!</p>
+      <p>Browse our amazing products. <a (click)="router.navigate(['/login'])" class="banner-login-link">Sign in</a> for
+        personalized recommendations, faster checkout, and exclusive deals!</p>
     </div>
   </div>
 
@@ -11,10 +13,7 @@
   <div class="category-filter">
     <h3>Shop by Category</h3>
     <div class="category-buttons">
-      <button 
-        *ngFor="let category of categories" 
-        class="category-btn"
-        [class.active]="selectedCategory === category"
+      <button *ngFor="let category of categories" class="category-btn" [class.active]="selectedCategory === category"
         (click)="filterByCategory(category)">
         {{category}}
       </button>
@@ -27,7 +26,7 @@
       {{selectedCategory === 'All' ? 'Featured Products' : selectedCategory}}
       <span class="product-count">({{getFilteredProducts().length}} items)</span>
     </h2>
-    
+
     <div class="products-grid">
       <div *ngFor="let product of getFilteredProducts()" class="product-card">
         <div class="product-image">
@@ -35,60 +34,58 @@
           <div class="product-badge" *ngIf="product.originalPrice">
             Save ₹{{(product.originalPrice - product.price).toFixed(2)}}
           </div>
-          <div class="stock-status" [class.out-of-stock]="!product.inStock">
+          <!-- <div class="stock-status" [class.out-of-stock]="!product.inStock">
             {{product.inStock ? 'In Stock' : 'Out of Stock'}}
-          </div>
+          </div> -->
+          <button 
+            class="wishlist-icon-btn"
+            [class.in-wishlist]="isInWishlist(product.id)"
+            (click)="addToWishlist(product, $event)"
+            [title]="isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'">
+            <span class="heart-icon">{{ isInWishlist(product.id) ? '❤️' : '🤍' }}</span>
+          </button>
         </div>
-        
+
         <div class="product-info">
           <h3 class="product-name">{{product.name}}</h3>
-          
-          <div class="product-rating">
+
+          <div class="product-rating"> 
             <div class="stars">
-              <span *ngFor="let star of getStarArray(product.rating)" 
-                    class="star" 
-                    [class.filled]="star">★</span>
+              <span *ngFor="let star of getStarArray(product.rating)" class="star" [class.filled]="star">★</span>
             </div>
             <span class="rating-text">{{product.rating}} ({{product.reviews}} reviews)</span>
           </div>
-          
+
           <div class="product-price">
             <span class="current-price">₹{{product.price}}</span>
             <span *ngIf="product.originalPrice" class="original-price">₹{{product.originalPrice}}</span>
           </div>
-          
+
           <div class="product-actions">
-            <button 
-              class="add-to-cart-btn" 
-              [disabled]="!product.inStock"
-              (click)="addToCart(product)"
+            <button class="add-to-cart-btn" [disabled]="!product.inStock" (click)="addToCart(product)"
               [title]="!isAuthenticated ? 'Sign in to add to cart' : 'Add to cart'">
               <span class="btn-icon">🛒</span>
               {{product.inStock ? 'Add to Cart' : 'Out of Stock'}}
             </button>
-            
+
             <div class="secondary-actions" *ngIf="product.inStock">
-              <button 
-                class="buy-now-btn"
-                (click)="buyNow(product)"
+              <button class="buy-now-btn" (click)="buyNow(product)"
                 [title]="!isAuthenticated ? 'Sign in to buy now' : 'Buy now'">
                 <span class="btn-icon">⚡</span>
                 Buy Now
               </button>
-              
-              <button 
-                class="wishlist-btn"
-                (click)="addToWishlist(product)"
+
+              <!-- <button class="wishlist-btn" (click)="addToWishlist(product)" [class.in-wishlist]="isInWishlist(product.id)"
                 [title]="!isAuthenticated ? 'Sign in to add to wishlist' : 'Add to wishlist'">
-                <span class="btn-icon">❤️</span>
-              </button>
+                <span class="btn-icon">{{isInWishlist(product.id)  ? '❤️' : '🤍' }}</span>
+              </button> -->
             </div>
           </div>
-          
+
           <!-- Authentication prompt for guest users -->
           <div class="auth-prompt" *ngIf="!isAuthenticated">
             <small>
-              <a (click)="router.navigate(['/login'])" class="login-link">Sign in</a> 
+              <a (click)="router.navigate(['/login'])" class="login-link">Sign in</a>
               for personalized recommendations and faster checkout
             </small>
           </div>

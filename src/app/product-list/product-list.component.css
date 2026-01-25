@@ -335,3 +335,87 @@
     gap: 0.25rem;
   }
 }
+
+/*  these styles for wishlist */
+
+.product-image {
+  position: relative;
+}
+
+/* Wishlist Icon on Product Image */
+.wishlist-icon-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.wishlist-icon-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.wishlist-icon-btn.in-wishlist {
+  background: #fff;
+  animation: heartbeat 0.3s ease;
+}
+
+.heart-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Wishlist Button in Actions */
+.wishlist-btn {
+  padding: 0.6rem;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wishlist-btn:hover {
+  border-color: #ff4757;
+  background: #fff5f5;
+  transform: translateY(-2px);
+}
+
+.wishlist-btn.in-wishlist {
+  border-color: #ff4757;
+  background: #fff5f5;
+}
+
+.wishlist-btn.in-wishlist .btn-icon {
+  animation: heartbeat 0.3s ease;
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
